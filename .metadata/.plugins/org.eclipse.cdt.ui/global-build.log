@@ -1,0 +1,14 @@
+10:29:33 **** Incremental Build of configuration Debug for project AUDIO_PWM ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/stm32f4xx_it.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f4xx_it.d" -MT"Core/Src/stm32f4xx_it.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f4xx_it.o"
+arm-none-eabi-gcc -o "AUDIO_PWM.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/exfat/Universidad/6_semestre/Diseño_de_Amplificadores/Amplifier_ClassD/AUDIO_PWM/STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="AUDIO_PWM.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: AUDIO_PWM.elf
+ 
+arm-none-eabi-size  AUDIO_PWM.elf 
+arm-none-eabi-objdump -h -S AUDIO_PWM.elf  > "AUDIO_PWM.list"
+   text	   data	    bss	    dec	    hex	filename
+  16400	     12	   1900	  18312	   4788	AUDIO_PWM.elf
+Finished building: default.size.stdout
+ 
+Finished building: AUDIO_PWM.list
+ 

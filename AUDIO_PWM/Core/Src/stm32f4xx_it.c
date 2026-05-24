@@ -31,7 +31,13 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define ADC_MAX     3.3f
+#define ADC_SIZE     4096.0f
+#define OFFSET_VOLT 0.6f
+#define RANGE_VOLT 2.3f
 
+#define OFFSET ((uint16_t)((OFFSET_VOLT / ADC_MAX) * ADC_SIZE))
+#define RANGE 	((uint16_t)((RANGE_VOLT / ADC_MAX) * ADC_SIZE))
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -41,8 +47,10 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-extern volatile uint16_t adc_buf[2];
-extern volatile uint16_t Duty_cicle;
+volatile uint16_t audio = 4096;
+volatile uint16_t Volumen = 0;
+volatile uint32_t scaled_sample = 0;
+volatile uint32_t err = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,8 +65,9 @@ extern volatile uint16_t Duty_cicle;
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc1;
-extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim1;
+extern volatile uint16_t adc_buf[2];
+extern volatile uint16_t Duty_cicle;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -202,20 +211,28 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles TIM2 global interrupt.
+  * @brief This function handles TIM1 break interrupt and TIM9 global interrupt.
   */
-void TIM2_IRQHandler(void)
+void TIM1_BRK_TIM9_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM2_IRQn 0 */
+  /* USER CODE BEGIN TIM1_BRK_TIM9_IRQn 0 */
 
-  /* USER CODE END TIM2_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim2);
-  /* USER CODE BEGIN TIM2_IRQn 1 */
+  /* USER CODE END TIM1_BRK_TIM9_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim1);
+  /* USER CODE BEGIN TIM1_BRK_TIM9_IRQn 1 */
+  	TIM1->SR &= ~TIM_SR_UIF;
+  	audio = adc_buf[0];s
+	Volumen = adc_buf[1];
 
-  // Update PWM duty cycle
-  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, Duty_cicle);
+	// Scale ADC (0-4095) to PWM range (0-499)
+	scaled_sample = (audio * 499*Volumen)+ err;
+	Duty_cicle  = scaled_sample >> 24;
 
-  /* USER CODE END TIM2_IRQn 1 */
+	if(Duty_cicle > 499)
+	    Duty_cicle = 499;
+	TIM1->CCR1 = Duty_cicle;
+	err = scaled_sample - (Duty_cicle << 24);
+  /* USER CODE END TIM1_BRK_TIM9_IRQn 1 */
 }
 
 /**
