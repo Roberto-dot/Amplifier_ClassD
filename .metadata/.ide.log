@@ -1,0 +1,7 @@
+2026-05-24 09:50:34,198 [INFO] Activator:176 - 
+
+
+2026-05-24 09:50:34,200 [INFO] Activator:177 - !SESSION log4j initialized
+2026-05-24 09:50:36,812 [INFO] LogOutputStream:77 - [STDOUT_REDIRECT] 
+2026-05-24 09:50:58,543 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-05-24 09:50:58,558 [ERROR] ConfigurationRetriever:142 - IOException on connection: Network is unreachable

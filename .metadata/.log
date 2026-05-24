@@ -1,0 +1,15 @@
+!SESSION 2026-05-24 09:50:05.482 -----------------------------------------------
+eclipse.buildId=Version 2.0.0
+java.version=21.0.8
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-05-24 09:50:33.680
+!MESSAGE Log4j2 initialized with config file /mnt/exfat/Universidad/6_semestre/Diseño_de_Amplificadores/Amplifier_ClassD/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-05-24 09:50:37.455
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-24 09:52:14.096
+!MESSAGE Indexed 'AUDIO_PWM' (23 sources, 121 headers) in 3.04 sec: 12,529 declarations; 61,519 references; 1 unresolved inclusions; 92 syntax errors; 240 unresolved names (0.32%)
