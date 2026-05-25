@@ -232,7 +232,7 @@ void TIM1_BRK_TIM9_IRQHandler(void)
 
 	if(Duty_cicle > 499)
 	    Duty_cicle = 499;
-	TIM1->CCR1 = Duty_cicle;
+	TIM1->CCR1 = (uint16_t)Duty_cicle;
 	err = scaled_sample - (Duty_cicle << 24);
   /* USER CODE END TIM1_BRK_TIM9_IRQn 1 */
 }
