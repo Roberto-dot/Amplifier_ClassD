@@ -42,7 +42,11 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 extern volatile uint16_t adc_buf[2];
-extern volatile uint16_t Duty_cicle;
+extern volatile uint32_t Duty_cicle;
+
+volatile uint16_t audio;
+volatile uint16_t Volumen;
+uint16_t err;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -211,9 +215,15 @@ void TIM2_IRQHandler(void)
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
+  /* USER CODE BEGIN 3 */
+  	audio = adc_buf[0];
+  	Volumen = adc_buf[1];
 
+
+  	// Scale ADC (0-4095) to PWM range (0-499)
+  	Duty_cicle  = (audio * 499* Volumen) >> 24;
   // Update PWM duty cycle
-  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, Duty_cicle);
+  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, (uint16_t)Duty_cicle);
 
   /* USER CODE END TIM2_IRQn 1 */
 }

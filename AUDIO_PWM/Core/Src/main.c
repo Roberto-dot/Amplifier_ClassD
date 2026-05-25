@@ -123,22 +123,12 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint16_t audio;
-  uint16_t Volumen;
-  uint16_t err;
+
 
   while (1)
   {
     /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
-	audio = adc_buf[0] - OFFSET;
-	Volumen = adc_buf[1];
-
-
-	// Scale ADC (0-4095) to PWM range (0-499)
-	Duty_cicle  = (audio * 499) / RANGE;
-	Duty_cicle =  (Duty_cicle*Volumen) >> 12;
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
