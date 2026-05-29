@@ -53,6 +53,10 @@ volatile uint16_t audio = 4096;
 volatile uint16_t Volumen = 0;
 volatile uint32_t scaled_sample = 0;
 volatile uint32_t err = 0;
+
+extern volatile uint16_t adc_buf[2];
+extern volatile uint16_t Duty_cicle;
+extern TIM_HandleTypeDef htim1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -68,8 +72,6 @@ volatile uint32_t err = 0;
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc1;
 extern TIM_HandleTypeDef htim1;
-extern volatile uint16_t adc_buf[2];
-extern volatile uint16_t Duty_cicle;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -213,28 +215,28 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles TIM1 break interrupt and TIM9 global interrupt.
+  * @brief This function handles TIM1 update interrupt and TIM10 global interrupt.
   */
-void TIM1_BRK_TIM9_IRQHandler(void)
+void TIM1_UP_TIM10_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM1_BRK_TIM9_IRQn 0 */
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
 
-  /* USER CODE END TIM1_BRK_TIM9_IRQn 0 */
+  /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
-  /* USER CODE BEGIN TIM1_BRK_TIM9_IRQn 1 */
-  	TIM1->SR &= ~TIM_SR_UIF;
-  	audio = adc_buf[0];s
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
+	TIM1->SR &= ~TIM_SR_UIF;
+	audio = adc_buf[0];
 	Volumen = adc_buf[1];
 
 	// Scale ADC (0-4095) to PWM range (0-499)
-	scaled_sample = (audio * 499*Volumen)+ err;
-	Duty_cicle  = scaled_sample >> 24;
+	Duty_cicle = (audio * 499)>>12;
+	Duty_cicle  = Duty_cicle*Volumen >> 12;
 
 	if(Duty_cicle > 499)
 	    Duty_cicle = 499;
 	TIM1->CCR1 = (uint16_t)Duty_cicle;
-	err = scaled_sample - (Duty_cicle << 24);
-  /* USER CODE END TIM1_BRK_TIM9_IRQn 1 */
+	//err = scaled_sample - (Duty_cicle << 24);
+  /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
 }
 
 /**

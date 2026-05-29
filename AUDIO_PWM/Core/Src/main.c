@@ -117,7 +117,8 @@ int main(void)
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);           // CH1N complementary
   HAL_TIM_OC_Start(&htim1, TIM_CHANNEL_2);               // CH2  internal trigger only
 
-  HAL_TIM_Base_Start_IT(&htim2);                         // 48 kHz interrupt
+  HAL_TIM_Base_Start_IT(&htim2);
+  HAL_TIM_Base_Start_IT(&htim1);                        // 48 kHz interrupt
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_buf, 2);      // ADC + DMA
   /* USER CODE END 2 */
 
