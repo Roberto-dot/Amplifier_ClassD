@@ -44,9 +44,12 @@
 extern volatile uint16_t adc_buf[2];
 extern volatile uint32_t Duty_cicle;
 
+
 volatile uint16_t audio;
 volatile uint16_t Volumen;
 uint16_t err;
+
+extern TIM_HandleTypeDef htim1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -62,7 +65,6 @@ uint16_t err;
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc1;
 extern TIM_HandleTypeDef htim2;
-extern TIM_HandleTypeDef htim1;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -221,7 +223,8 @@ void TIM2_IRQHandler(void)
 
 
   	// Scale ADC (0-4095) to PWM range (0-499)
-  	Duty_cicle  = (audio * 499* Volumen) >> 24;
+  	Duty_cicle  =  (499* audio) >> 12;
+  	Duty_cicle = (Volumen*Duty_cicle)>> 12;
   // Update PWM duty cycle
   __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, (uint16_t)Duty_cicle);
 
