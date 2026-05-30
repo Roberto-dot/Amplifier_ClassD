@@ -31,15 +31,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define PWM_FREQUENCY 192
-#define ADC_MAX     3.3f
-#define ADC_SIZE     4096.0f
-#define OFFSET_VOLT 0.6f
-#define RANGE_VOLT 2.3f
 
-#define PWM 499
-#define OFFSET ((uint16_t)((OFFSET_VOLT / ADC_MAX) * ADC_SIZE))
-#define RANGE 	((uint16_t)((RANGE_VOLT / ADC_MAX) * ADC_SIZE))
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
