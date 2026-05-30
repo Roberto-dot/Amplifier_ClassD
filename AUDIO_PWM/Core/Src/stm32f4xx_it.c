@@ -31,15 +31,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define PWM_FREQUENCY 192
-#define ADC_MAX     3.3f
-#define ADC_SIZE     4096.0f
-#define OFFSET_VOLT 0.6f
-#define RANGE_VOLT 2.3f
 
-#define PWM 499
-#define OFFSET ((uint16_t)((OFFSET_VOLT / ADC_MAX) * ADC_SIZE))
-#define RANGE 	((uint16_t)((RANGE_VOLT / ADC_MAX) * ADC_SIZE))
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -49,8 +41,11 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-volatile uint16_t audio = 4096;
-volatile uint16_t Volumen = 0;
+uint16_t audio = 4096;
+uint16_t Volumen = 0;
+
+uint16_t err = 0;
+
 
 extern volatile uint16_t adc_buf[2];
 extern volatile uint16_t Duty_cicle;
@@ -227,12 +222,12 @@ void TIM1_UP_TIM10_IRQHandler(void)
 	Volumen = adc_buf[1];
 
 	// Scale ADC (0-4095) to PWM range (0-499)
-	Duty_cicle = (audio*PWM_PERIOD)>>12;
-	Duty_cicle  = Duty_cicle*Volumen >> 12;
+	uint64_t escale = (uint64_t)Volumen*audio*PWM_PERIOD + err;
+	Duty_cicle  = escale >> 24;
 
 	if(Duty_cicle > PWM_PERIOD)
-	    Duty_cicle = PWM_PERIOD;
 	TIM1->CCR1 = (uint16_t)Duty_cicle;
+	err = (uint32_t)(escale & 0xFFFFFF);
   /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
 }
 
